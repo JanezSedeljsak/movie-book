@@ -48,28 +48,27 @@ export function getMovies(): MovieWithRating[] {
     const imgLink = 'https://i.pinimg.com/236x/0e/a8/42/0ea84268bdf37c4112d138bf2fec40f5.jpg';
 
     return [
-        {title: 'Film1', year: 2010, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
-        {title: 'Film2', year: 2015, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
-        {title: 'Film3', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-        {title: 'Film4', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-        {title: 'Film5', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {id: 'a', title: 'Film1', year: 2010, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
+        {id: 'b', title: 'Film2', year: 2015, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
+        {id: 'c', title: 'Film3', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {id: 'd', title: 'Film4', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {id: 'e', title: 'Film5', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
     ];
 }
-
 
 export function getAllMovies(): MovieWithRating[] {
     const imgLink = 'https://i.pinimg.com/236x/0e/a8/42/0ea84268bdf37c4112d138bf2fec40f5.jpg';
 
     return [
-        {title: 'Test', year: 2010, imgSrc: imgLink, avgRating: 2.3, numberOfRatings: 140 },
-        {title: 'Film', year: 2015, imgSrc: imgLink, avgRating: 4.1, numberOfRatings: 140 },
-        {title: 'Tecaj', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-        {title: 'Kekec', year: 2009, imgSrc: imgLink, avgRating: 4.5, numberOfRatings: 150 },
-        {title: 'Martin Krpan', year: 2019, imgSrc: imgLink, avgRating: 5.0, numberOfRatings: 150 },
-        {title: 'Tu pa tam', year: 2010, imgSrc: imgLink, avgRating: 4.9, numberOfRatings: 140 },
-        {title: 'Film23', year: 2015, imgSrc: imgLink, avgRating: 2.0, numberOfRatings: 140 },
-        {title: 'Film34', year: 2009, imgSrc: imgLink, avgRating: 2.1, numberOfRatings: 150 },
-        {title: 'Film45', year: 2009, imgSrc: imgLink, avgRating: 3.3, numberOfRatings: 150 },
-        {title: 'Film56', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {id: 'a', title: 'Test', year: 2010, imgSrc: imgLink, avgRating: 2.3, numberOfRatings: 140 },
+        {id: 'b', title: 'Film', year: 2015, imgSrc: imgLink, avgRating: 4.1, numberOfRatings: 140 },
+        {id: 'c', title: 'Tecaj', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {id: 'd', title: 'Kekec', year: 2009, imgSrc: imgLink, avgRating: 4.5, numberOfRatings: 150 },
+        {id: 'e', title: 'Martin Krpan', year: 2019, imgSrc: imgLink, avgRating: 5.0, numberOfRatings: 150 },
+        {id: 'f', title: 'Tu pa tam', year: 2010, imgSrc: imgLink, avgRating: 4.9, numberOfRatings: 140 },
+        {id: 'g', title: 'Film23', year: 2015, imgSrc: imgLink, avgRating: 2.0, numberOfRatings: 140 },
+        {id: 'h', title: 'Film34', year: 2009, imgSrc: imgLink, avgRating: 2.1, numberOfRatings: 150 },
+        {id: 'i', title: 'Film45', year: 2009, imgSrc: imgLink, avgRating: 3.3, numberOfRatings: 150 },
+        {id: 'j', title: 'Film56', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
     ];
 }
