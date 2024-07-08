@@ -1,20 +1,5 @@
-import { Card } from 'antd';
-import { MovieWithRating } from '@/util/interfaces';
 import { getMovies } from '@/util/helpers';
-
-const { Meta } = Card;
-
-const MovieCard = (data: MovieWithRating) => {
-    return (
-        <Card
-            hoverable
-            style={{ width: 160 }}
-            cover={<img alt="example" src={data.imgSrc} />}
-        >
-            <Meta title={data.title} description={data.year} />
-        </Card>
-    )
-}
+import MovieCard from '@/components/moviecard';
 
 export default function Index() {
 

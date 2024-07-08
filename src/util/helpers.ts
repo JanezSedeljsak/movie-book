@@ -51,5 +51,7 @@ export function getMovies(): MovieWithRating[] {
         {title: 'Film1', year: 2010, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
         {title: 'Film2', year: 2015, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 140 },
         {title: 'Film3', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {title: 'Film4', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
+        {title: 'Film5', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
     ];
 }
