@@ -6,9 +6,9 @@ export default function Index() {
     const [rightNum, setRightNum] = useState(0);
     const [total, setTotal] = useState(0);
 
-    useEffect(() => {
-       setTotal(leftNum + rightNum) 
-    }, [leftNum, rightNum]);
+    // useEffect(() => {
+    //    setTotal(leftNum + rightNum) 
+    // }, [leftNum, rightNum]);
 
     const addNums = () => {
         setTotal(leftNum + rightNum);

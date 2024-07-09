@@ -5,7 +5,6 @@ import pages from 'vite-plugin-pages'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/movie-book-frontend/',
   plugins: [
     react(),
     pages({ dirs: './src/pages' })

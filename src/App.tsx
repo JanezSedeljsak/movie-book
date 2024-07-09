@@ -16,7 +16,7 @@ function App() {
   );
 
   return (
-    <BrowserRouter basename="/movie-book-frontend">
+    <>
       <SnackbarProvider />
       <Layout>
         <Header>
@@ -28,7 +28,7 @@ function App() {
           </Suspense>
         </Content>
       </Layout>
-    </BrowserRouter>
+    </>
   )
 }
 
