@@ -1,0 +1,13 @@
+flask
+redis
+flask_sqlalchemy
+SQLAlchemy
+psycopg2-binary
+scikit-learn
+pandas
+numpy
+flask-cors
+scipy
+uuid
+python-dotenv
+faker

@@ -58,6 +58,25 @@ services:
     networks:
       - movie_book_network
     
+  api:
+    build:
+      context: ./server
+      target: builder
+    stop_signal: SIGINT
+    environment:
+      DB_DATABASE: "${POSTGRES_DB}"
+      DB_USER: "${POSTGRES_USER}"
+      DB_PASSWORD: "${POSTGRES_PASSWORD}"
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}"
+    ports:
+      - '5000:5000'
+    depends_on:
+      - redis
+      - database
+    networks:
+      - movie_book_network
+    volumes:
+      - ./data:/data
 
 
 networks:
