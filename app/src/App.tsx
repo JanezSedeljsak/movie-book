@@ -29,7 +29,8 @@ function App() {
     </div>
   );
 
-  const makeActiveStyle = (urlPath: string): Object => {if (location.pathname === urlPath) {
+  const makeActiveStyle = (urlPath: string): Object => {
+    if (location.pathname === urlPath) {
       return activeRouteStyle;
     }
 
