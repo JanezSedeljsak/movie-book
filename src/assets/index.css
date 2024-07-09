@@ -43,3 +43,15 @@ header {
   transform: rotate(-5deg);
 }
 
+.link-button {
+  background-color: transparent;
+  color: white;
+  border-width: 0px;
+  font-weight: bold;
+  padding: 18px;
+  font-size: 16px;
+}
+
+.link-button:hover {
+  background-color: transparent !important;
+}
