@@ -37,25 +37,15 @@ export default function Movies() {
     }, [order, orderValue]);
 
     return (
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignContent: "center",
-                flexWrap: "wrap",
-                flexDirection: "column",
-                flex: 1,
-                width: '100%'
-            }}
-        >
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
+        <div>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 30 }}>
                 <Search
                     style={{ width: 300 }}
                     placeholder="Search movies"
                     onSearch={(value, e, info) => setSearch(value)}
                     enterButton
                 />
-                <div>
+                <div style={{ marginLeft: 20 }}>
                     <Radio.Group value={order} onChange={e => setOrder(e.target.value)}>
                         <Radio.Button value="ascending">Ascending</Radio.Button>
                         <Radio.Button value="descending">Descending</Radio.Button>
@@ -87,7 +77,7 @@ export default function Movies() {
                 {movies
                     .filter(movie => filterMovies(search, movie))
                     .map((movie) => (
-                        <MovieCard key={movie.title} {...movie} />
+                        <MovieCard key={movie.id} {...movie} />
                     ))
                 }
             </div>
