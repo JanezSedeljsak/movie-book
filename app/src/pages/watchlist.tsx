@@ -1,7 +1,9 @@
 import { getMovies } from '@/util/helpers';
 import MovieCard from '@/components/moviecard';
+import { useAuth } from '@/services/auth';
 
 export default function WatchList() {
+    useAuth();
 
     const recommendedMovies = getMovies();
     const watchedMovies = getMovies();

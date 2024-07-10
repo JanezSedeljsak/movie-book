@@ -11,6 +11,8 @@ import {
   PlayCircleOutlined,
   UserOutlined
 } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { AuthState } from './store/auth';
 
 const { Header, Content } = Layout;
 
@@ -22,6 +24,9 @@ function App() {
   const Routes = () => useRoutes(routes);
   const location = useLocation();
   const navigation = useNavigate();
+
+  const userEmail = useSelector((state: { auth: AuthState }) => state.auth.email);
+  const isAuth = useSelector((state: { auth: AuthState }) => state.auth.token !== null);
 
   const fallback = () => (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>
@@ -42,7 +47,7 @@ function App() {
       title: 'You are logged in as:',
       content: (
         <div>
-          <p>your gmail</p>
+          <p>{userEmail}</p>
         </div>
       ),
       onOk() { },
@@ -57,7 +62,7 @@ function App() {
           <h1 style={{ color: 'white', cursor: 'pointer' }} onClick={() => navigation('/')}><PlayCircleOutlined /> Movie book</h1>
           <Button className='link-button' onClick={() => navigation('/')} style={makeActiveStyle('/')}><HomeOutlined /> Home</Button>
           <Button className='link-button' onClick={() => navigation('/movies')} style={makeActiveStyle('/movies')}><FileSearchOutlined /> Search</Button>
-          <Button className='link-button' onClick={() => navigation('/watchlist')} style={makeActiveStyle('/watchlist')}><UnorderedListOutlined /> Watch-list</Button>
+          {isAuth ? <Button className='link-button' onClick={() => navigation('/watchlist')} style={makeActiveStyle('/watchlist')}><UnorderedListOutlined /> Watch-list</Button> : null}
         </Header>
         <Content style={{ display: 'flex', padding: '0 50px', backgroundColor: '#eee' }}>
           <Suspense fallback={fallback()}>
@@ -65,7 +70,7 @@ function App() {
           </Suspense>
         </Content>
       </Layout>
-      <FloatButton onClick={() => showProfileInfo()} icon={<UserOutlined />} style={{ bottom: 106 }} />
+      {isAuth ? <FloatButton onClick={() => showProfileInfo()} icon={<UserOutlined />} style={{ bottom: 106 }} /> : null}
       <FloatButton onClick={() => navigation('/login')} icon={<LoginOutlined />} />
     </>
   )
