@@ -14,6 +14,18 @@ class Movie(Base):
     year = db.Column(db.Integer)
     img_src = db.Column(db.String)
 
+    @staticmethod
+    def searilize_movie_with_rating(data):
+        return {
+            'id': data.id,
+            'title': data.title,
+            'year': data.year,
+            'imgSrc': data.imgSrc,
+            'avgRating': data.avgRating,
+            'numberOfRatings': data.numberOfRatings
+        }
+
+
 class User(Base):
     __tablename__ = 'directus_users'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
