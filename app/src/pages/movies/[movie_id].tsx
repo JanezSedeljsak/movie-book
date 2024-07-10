@@ -5,33 +5,75 @@ import { Rate, Spin, Divider } from "antd";
 import API from "@/services/api";
 import MovieCard from "@/components/moviecard";
 import { PlayCircleFilled } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth";
+import DirectusService from "@/services/directus";
 
-function UserRate(movie: MovieWithStats) {
+interface RateProps {
+    movie: MovieWithStats,
+    updateRating: CallableFunction
+}
+
+function UserRate({ movie, updateRating }: RateProps) {
     const [rating, setRating] = useState(5.0);
+    const [isLoading, setIsLoading] = useState(false);
 
-    if (movie.userRating) {
-        <Rate allowHalf disabled value={movie.userRating} />
+    const token = useSelector((state: { auth: AuthState }) => state.auth.token) as string;
+    const userId = useSelector((state: { auth: AuthState }) => state.auth.userId) as string;
+
+    if (movie.userRating !== null) {
+        return (
+            <>
+                <h3 style={{ marginBottom: 5 }}>Your rating:</h3>
+                <Rate allowHalf disabled value={movie.userRating} />
+            </>
+        );
+    }
+
+    if (isLoading) {
+        return <Spin />
     }
 
     return (
-        <Rate 
-            allowHalf 
-            onChange={() => {
-                setRating(rating);
-                enqueueSnackbar(`You have rated this movie with ${rating.toFixed(1)}`, {
-                    variant: 'info'
-                });
-            }} 
-            value={rating} 
-        />
+        <>
+            <h3 style={{ marginBottom: 5 }}>Rate this movie:</h3>
+            <Rate
+                allowHalf
+                onChange={async (newRating: number) => {
+                    setIsLoading(true);
+                    setRating(newRating);
+                    try {
+                        await DirectusService.createRating(movie.id, userId, newRating, token);
+                        updateRating();
+                        enqueueSnackbar(`You have rated this movie with ${newRating.toFixed(1)}`, {
+                            variant: 'info'
+                        });
+                    } catch (error) {
+                        console.error(error);
+                        enqueueSnackbar('Failed to create rating!', {
+                            variant: 'error'
+                        });
+                    } finally {
+                        setIsLoading(false);
+                    }
+                }}
+                value={rating}
+            />
+        </>
     );
 }
 
 function SelectedMovie(props: { id: string }) {
-    // TODO: fix rerendering
-    const { data, isLoading, error } = useFetch<MovieWithStats>(() => API.getMovie(props.id));
+    const [movieRated, setMovieRated] = useState(false);
+    const token = useSelector((state: { auth: AuthState }) => state.auth.token) as string;
+
+    const fetchMovie = useCallback(() => {
+        return API.getMovie(props.id, token);
+    }, [props.id, movieRated, token]);
+
+    const { data, isLoading, error } = useFetch<MovieWithStats>(fetchMovie);
 
     if (isLoading) {
         return <Spin />
@@ -69,8 +111,7 @@ function SelectedMovie(props: { id: string }) {
 
                     <div>
                         <Divider />
-                        <h3 style={{ marginBottom: 5 }}>Rate this movie:</h3>
-                        <UserRate {...selectedMovie} />
+                        <UserRate movie={selectedMovie} updateRating={() => setMovieRated(true)} />
                     </div>
                 </div>
             </div>

@@ -3,6 +3,13 @@ const app = express()
 
 app.use(express.static(__dirname + '/dist'));
 
+app.get('/api/config', (req, res) => {
+    res.json({
+        DIRECTUS_URI: process.env.DIRECTUS_URI,
+        API_URI: process.env.API_URI,
+    });
+});
+
 app.get('*', (req, res) => {
     res.sendFile(__dirname + '/dist/index.html')
 });

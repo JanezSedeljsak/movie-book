@@ -1,11 +1,12 @@
 import type { FormProps } from 'antd';
-import { Button, Card, Form, Input } from 'antd';
+import { Button, Card, Form, Input, Spin } from 'antd';
 import { PlayCircleFilled } from '@ant-design/icons';
 import DirectusService from '@/services/directus';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import { CenterSpin } from '@/components/centerspin';
 
 type FieldType = {
     email?: string;
@@ -23,28 +24,46 @@ function CardTitle() {
 export default function Login() {
     const dispatch = useDispatch();
     const navigator = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        const credentials = await DirectusService.login(
-            values.email as string, 
-            values.password as string
-        );
+        setIsLoading(true);
+        try {
+            const credentials = await DirectusService.login(
+                values.email as string,
+                values.password as string
+            );
 
-        dispatch({ type: 'LOGIN', payload: {
-            email: values.email,
-            token: credentials.access_token
-        }});
+            dispatch({
+                type: 'LOGIN', payload: {
+                    email: credentials.email,
+                    token: credentials.access_token,
+                    userId: credentials.id,
+                    name: `${credentials.first_name} ${credentials.last_name}`
+                }
+            });
 
-        enqueueSnackbar('You have successfully logged in!', {
-            variant: 'success'
-        });
+            enqueueSnackbar('You have successfully logged in!', {
+                variant: 'success'
+            });
 
-        navigator('/');
+            navigator('/');
+        } catch (error) {
+            enqueueSnackbar('Invalid credentials!', {
+                variant: 'error'
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+
+    if (isLoading) {
+        return <CenterSpin />
+    }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>

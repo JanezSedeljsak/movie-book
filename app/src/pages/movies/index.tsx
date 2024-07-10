@@ -31,7 +31,6 @@ export default function Movies() {
             }
         });
 
-        console.log(sortedMovies);
         setMovies([...sortedMovies]);
 
     }, [order, orderValue]);

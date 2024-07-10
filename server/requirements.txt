@@ -11,3 +11,4 @@ scipy
 uuid
 python-dotenv
 faker
+requests

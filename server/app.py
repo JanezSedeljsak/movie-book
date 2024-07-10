@@ -7,9 +7,7 @@ from api.models import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
 db.init_app(app)
-
 CORS(app)
 
 app.register_blueprint(movie_blueprint, url_prefix='/movies')

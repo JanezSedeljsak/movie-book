@@ -26,12 +26,17 @@ export function useFetch<T>(fetchFunction: () => Promise<T>): { data: T | null, 
     return { data, isLoading, error };
 }
 
-export async function fetchData<T>(endpoint: string): Promise<T> {
+export async function fetchData<T>(endpoint: string, token: string | null = null): Promise<T> {
     try {
-        const res = await fetch(`${config.API_URI}${endpoint}`)
+        const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const res = await fetch(`${config.API_URI}${endpoint}`, {
+            headers: headers
+        });
+
         if (!res.ok) {
             throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
         }
+
         const data: T = await res.json();
         return data;
     } catch (error) {
@@ -71,4 +76,10 @@ export function getAllMovies(): MovieWithRating[] {
         { id: 'i', title: 'Film45', year: 2009, imgSrc: imgLink, avgRating: 3.3, numberOfRatings: 150 },
         { id: 'j', title: 'Film56', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
     ];
+}
+
+export function getActiveRouteStyle() {
+    return {
+        boxShadow: 'rgba(50, 50, 93, 0.45) 0px 6px 12px -2px, rgba(0, 0, 0, 0.6) 0px 3px 7px -3px'
+    }
 }
