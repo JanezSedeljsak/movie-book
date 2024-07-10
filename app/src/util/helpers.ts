@@ -28,7 +28,7 @@ export function useFetch<T>(fetchFunction: () => Promise<T>): { data: T | null, 
 
 export async function fetchData<T>(endpoint: string): Promise<T> {
     try {
-        const res = await fetch(`${config.RECOMMENDER_URI}${endpoint}`)
+        const res = await fetch(`${config.API_URI}${endpoint}`)
         if (!res.ok) {
             throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
         }

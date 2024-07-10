@@ -18,7 +18,7 @@ const MovieCard = (data: MovieWithRating) => {
                 description={
                     <div>
                         <p>Year <b>{data.year}</b></p>
-                        <p>Views <b>{data.numberOfRatings}</b></p>
+                        <p style={{ marginBottom: 5 }}>Views <b>{data.numberOfRatings}</b></p>
                         <Rate allowHalf disabled defaultValue={data.avgRating} />
                     </div>
                 } 
