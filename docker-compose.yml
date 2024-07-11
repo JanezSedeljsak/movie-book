@@ -67,6 +67,7 @@ services:
     stop_signal: SIGINT
     environment:
       DIRECTUS_URI: "http://directus:8055"
+      REDIS_URI: "redis"
       POSTGRES_DB: "${POSTGRES_DB}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
@@ -80,6 +81,19 @@ services:
       - movie_book_network
     volumes:
       - ./data:/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api
+      - directus
+      - app
+    networks:
+      - movie_book_network
 
 
 networks:

@@ -1,6 +1,10 @@
 from flask import request as flask_request
 import requests
+import redis
 import os
+
+redis_uri = os.getenv('REDIS_URI', 'localhost')
+RedisService = redis.Redis(host=redis_uri, port=6379)
 
 class DirectusAuthService:
 
