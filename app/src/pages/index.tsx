@@ -1,4 +1,4 @@
-import { getMovies, useFetch } from '@/util/helpers';
+import { useFetch } from '@/util/helpers';
 import MovieCard from '@/components/moviecard';
 import { MovieWithRating } from '@/util/interfaces';
 import API from '@/services/api';

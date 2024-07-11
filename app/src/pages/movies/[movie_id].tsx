@@ -1,5 +1,5 @@
-import { getMovies, useFetch } from "@/util/helpers";
-import { MovieWithStats } from "@/util/interfaces";
+import { useFetch } from "@/util/helpers";
+import { MovieWithRating, MovieWithStats } from "@/util/interfaces";
 import { useParams } from "react-router-dom";
 import { Rate, Spin, Divider } from "antd";
 import API from "@/services/api";
@@ -43,6 +43,11 @@ function UserRate({ movie, updateRating }: RateProps) {
             <Rate
                 allowHalf
                 onChange={async (newRating: number) => {
+                    const isPositive = newRating > 0;
+                    if (!isPositive) {
+                        return;
+                    }
+
                     setIsLoading(true);
                     setRating(newRating);
                     try {
@@ -125,13 +130,26 @@ function SelectedMovie(props: { id: string }) {
 }
 
 function SimilarMovies(props: { id: string }) {
-    const movies = getMovies();
+    const fetchMovies = useCallback(() => {
+        return API.getSimilarMovies(props.id);
+    }, [props.id]);
 
+    const { data, isLoading, error } = useFetch<MovieWithRating[]>(fetchMovies);
+
+    if (isLoading) {
+        return <Spin />
+    }
+
+    if (error) {
+        return null;
+    }
+
+    const movies = data as MovieWithRating[];
     return (
         <div style={{ display: 'flex', gap: 10 }}>
-            {movies.map(movie => <MovieCard key={movie.id} {...movie} />)}
+            {movies.map((movie) => <MovieCard key={movie.id} {...movie} />)}
         </div>
-    )
+    );
 }
 
 export default function Movie() {

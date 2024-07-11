@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request as flask_request
 from api.models import db, Movie, Rating
 from api.services import DirectusAuthService
-from sqlalchemy import func
+from api.recommender import Recommender
+from sqlalchemy import and_, func
+import uuid
 
 movie_blueprint = Blueprint('movie_blueprint', __name__)
 
@@ -17,7 +19,7 @@ def get_movies():
                                     func.count(Movie.id).label('numberOfRatings'))\
         .join(Rating, Movie.id == Rating.movie_id)\
         .where(func.lower(Movie.title).like(f"%{title_query}%"))\
-        .group_by(Movie.id)\
+        .group_by(Movie.id)
     
     order_column_map = {
         'title': Movie.title,
@@ -68,14 +70,16 @@ def get_watched_movies():
     if user_id is None:
         return jsonify({'error': 'User not authenticated'}), 401
 
-    limit = flask_request.args.get('limit', default=8, type=int)
+    limit_query = flask_request.args.get('limit', default=8, type=int)
+    title_query = str(flask_request.args.get('title', default='', type=str)).lower()
+
     viewed_movies = db.session.query(Movie.id, Movie.title, Movie.year, Movie.img_src.label('imgSrc'), 
                                     func.avg(Rating.rating).label('avgRating'),
                                     func.count(Movie.id).label('numberOfRatings'))\
         .join(Rating, Movie.id == Rating.movie_id)\
-        .where(Rating.user_id == user_id)\
+        .where(and_(Rating.user_id == user_id, func.lower(Movie.title).like(f"%{title_query}%")))\
         .group_by(Movie.id)\
-        .limit(limit)\
+        .limit(limit_query)\
         .all()
 
     viewed_ids = [row.id for row in viewed_movies]
@@ -84,7 +88,6 @@ def get_watched_movies():
         .join(Rating, Movie.id == Rating.movie_id)\
         .where(Rating.movie_id.in_(viewed_ids))\
         .group_by(Movie.id)\
-        .limit(limit)\
         .all()
     
     movie_stats_map = {
@@ -133,4 +136,54 @@ def get_most_watched_movies():
     return jsonify(list(map(
         Movie.searilize_movie_with_rating,
         rated_movies
+    )))
+
+
+@movie_blueprint.route('/top/similar/<movie_id>', methods=['GET'])
+def get_most_similar_movies(movie_id: str):
+    predictor = Recommender.cached_build()
+    similar_movie_ids = predictor.similar_movies(movie_id)
+    uuid_ids = [uuid.UUID(movie_id) for movie_id in similar_movie_ids]
+
+    movies = db.session.query(Movie.id, Movie.title, Movie.year, Movie.img_src.label('imgSrc'), 
+                                    func.avg(Rating.rating).label('avgRating'),
+                                    func.count(Movie.id).label('numberOfRatings'))\
+        .join(Rating, Movie.id == Rating.movie_id)\
+        .where(Movie.id.in_(uuid_ids))\
+        .group_by(Movie.id)\
+        .all()
+    
+    movies_map = {str(movie.id): movie for movie in movies}
+    result = [movies_map[movie_id] for movie_id in similar_movie_ids]
+
+    return jsonify(list(map(
+        Movie.searilize_movie_with_rating,
+        result
+    )))
+
+
+@movie_blueprint.route('/top/recommendations', methods=['GET'])
+def get_recommended_movies():
+    user_id = DirectusAuthService.get_user_id_from_auth_token()
+    if user_id is None:
+        return jsonify({'error': 'User not authenticated'}), 401
+
+    predictor = Recommender.cached_build()
+    rec_movie_ids = predictor.recommend_for_user(user_id)
+    uuid_ids = [uuid.UUID(movie_id) for movie_id in rec_movie_ids]
+
+    movies = db.session.query(Movie.id, Movie.title, Movie.year, Movie.img_src.label('imgSrc'), 
+                                    func.avg(Rating.rating).label('avgRating'),
+                                    func.count(Movie.id).label('numberOfRatings'))\
+        .join(Rating, Movie.id == Rating.movie_id)\
+        .where(Movie.id.in_(uuid_ids))\
+        .group_by(Movie.id)\
+        .all()
+    
+    movies_map = {str(movie.id): movie for movie in movies}
+    result = [movies_map[movie_id] for movie_id in rec_movie_ids]
+
+    return jsonify(list(map(
+        Movie.searilize_movie_with_rating,
+        result
     )))

@@ -9,6 +9,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY . /app
 
+RUN if [ -d /pickles ]; then rm -rf /pickles; fi && mkdir /pickles
+
 EXPOSE 5000
 CMD ["python3", "app.py"]
 

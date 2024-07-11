@@ -49,35 +49,6 @@ export async function fetchData<T>(endpoint: string, token: string | null = null
     }
 }
 
-export function getMovies(): MovieWithRating[] {
-    const imgLink = 'https://i.pinimg.com/236x/0e/a8/42/0ea84268bdf37c4112d138bf2fec40f5.jpg';
-
-    return [
-        { id: 'a', title: 'Test', year: 2010, imgSrc: imgLink, avgRating: 2.3, numberOfRatings: 140 },
-        { id: 'b', title: 'Film', year: 2015, imgSrc: imgLink, avgRating: 4.1, numberOfRatings: 140 },
-        { id: 'c', title: 'Tecaj', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-        { id: 'd', title: 'Kekec', year: 2009, imgSrc: imgLink, avgRating: 4.5, numberOfRatings: 150 },
-        { id: 'e', title: 'Martin Krpan', year: 2019, imgSrc: imgLink, avgRating: 5.0, numberOfRatings: 150 },
-    ];
-}
-
-export function getAllMovies(): MovieWithRating[] {
-    const imgLink = 'https://i.pinimg.com/236x/0e/a8/42/0ea84268bdf37c4112d138bf2fec40f5.jpg';
-
-    return [
-        { id: 'a', title: 'Test', year: 2010, imgSrc: imgLink, avgRating: 2.3, numberOfRatings: 140 },
-        { id: 'b', title: 'Film', year: 2015, imgSrc: imgLink, avgRating: 4.1, numberOfRatings: 140 },
-        { id: 'c', title: 'Tecaj', year: 2009, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-        { id: 'd', title: 'Kekec', year: 2009, imgSrc: imgLink, avgRating: 4.5, numberOfRatings: 150 },
-        { id: 'e', title: 'Martin Krpan', year: 2019, imgSrc: imgLink, avgRating: 5.0, numberOfRatings: 150 },
-        { id: 'f', title: 'Tu pa tam', year: 2010, imgSrc: imgLink, avgRating: 4.9, numberOfRatings: 140 },
-        { id: 'g', title: 'Film23', year: 2015, imgSrc: imgLink, avgRating: 2.0, numberOfRatings: 140 },
-        { id: 'h', title: 'Film34', year: 2009, imgSrc: imgLink, avgRating: 2.1, numberOfRatings: 150 },
-        { id: 'i', title: 'Film45', year: 2009, imgSrc: imgLink, avgRating: 3.3, numberOfRatings: 150 },
-        { id: 'j', title: 'Film56', year: 2019, imgSrc: imgLink, avgRating: 4.3, numberOfRatings: 150 },
-    ];
-}
-
 export function getActiveRouteStyle() {
     return {
         boxShadow: 'rgba(50, 50, 93, 0.45) 0px 6px 12px -2px, rgba(0, 0, 0, 0.6) 0px 3px 7px -3px'
