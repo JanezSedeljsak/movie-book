@@ -1,6 +1,7 @@
 import { MovieWithRating } from "@/util/interfaces"
 import { Card, Rate } from "antd"
 import { useNavigate } from "react-router-dom";
+import Image from "@/components/image";
 
 const { Meta } = Card;
 
@@ -10,7 +11,9 @@ const MovieCard = (data: MovieWithRating) => {
         <Card
             hoverable
             style={{ width: 200 }}
-            cover={<img alt="image doesn't exist" src={data.imgSrc} height={160} style={{ objectFit: 'cover' }} />}
+            cover={
+                <Image src={data.imgSrc as string} style={{ height: '160px'}} />
+            }
             onClick={() => navigation(`/movies/${data.id}`)}
         >
             <Meta 

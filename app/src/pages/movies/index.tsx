@@ -1,39 +1,44 @@
 import MovieCard from "@/components/moviecard";
-import { getAllMovies } from "@/util/helpers";
+import API from "@/services/api";
+import { useFetch } from "@/util/helpers";
 import { MovieWithRating } from "@/util/interfaces";
-import { Input, Select, Radio } from "antd";
-import { useEffect, useState } from "react";
+import { Input, Select, Radio, Spin } from "antd";
+import { useState, useCallback } from "react";
 const { Search } = Input;
 
-type SortAttribute = 'year' | 'title' | 'avgRating';
+interface MovieListProps {
+    title: string,
+    order: string,
+    orderField: string
+}
+
+function MovieList(props: MovieListProps) {
+    const fetchMovies = useCallback(() => {
+        return API.getMovies(props.title, props.order, props.orderField);
+    }, [props.title, props.order, props.orderField]);
+
+    const { data, isLoading, error } = useFetch<MovieWithRating[]>(fetchMovies);
+
+    if (isLoading) {
+        return <Spin />
+    }
+
+    if (error) {
+        return null;
+    }
+
+    const movies = data as MovieWithRating[];
+    return (
+        <>
+            {movies.map((movie) => <MovieCard key={movie.id} {...movie} />)}
+        </>
+    )
+}
 
 export default function Movies() {
-    const [movies, setMovies] = useState(getAllMovies());
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState("ascending");
     const [orderValue, setOrderValue] = useState('title');
-
-    const filterMovies = (search: string, movie: MovieWithRating) => {
-        const isTitleMatch = movie.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
-        const isYearMatch = movie.year.toString().toLocaleLowerCase().includes(search.toLocaleLowerCase());
-        return isYearMatch || isTitleMatch;
-    }
-
-    useEffect(() => {
-        const isAscending = order === 'ascending';
-        const sortAttribute = orderValue as SortAttribute;
-
-        const sortedMovies = movies.sort((a, b) => {
-            if (isAscending) {
-                return a[sortAttribute] > b[sortAttribute] ? 1 : -1;
-            } else {
-                return a[sortAttribute] < b[sortAttribute] ? 1 : -1;
-            }
-        });
-
-        setMovies([...sortedMovies]);
-
-    }, [order, orderValue]);
 
     return (
         <div>
@@ -57,7 +62,7 @@ export default function Movies() {
                         options={[
                             { value: 'title', label: 'By title' },
                             { value: 'year', label: 'By year' },
-                            { value: 'avgRating', label: 'By rating' },
+                            { value: 'rating', label: 'By rating' },
                         ]}
                     />
                 </div>
@@ -73,12 +78,7 @@ export default function Movies() {
                     gap: "10px",
                 }}
             >
-                {movies
-                    .filter(movie => filterMovies(search, movie))
-                    .map((movie) => (
-                        <MovieCard key={movie.id} {...movie} />
-                    ))
-                }
+                <MovieList title={search} order={order} orderField={orderValue} />
             </div>
         </div>
     );

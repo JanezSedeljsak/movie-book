@@ -16,6 +16,10 @@ export default class API {
     }
 
     static getWatchedMovies(jwt: string, limit: number = 8): Promise<MovieWithRating[]> {
-        return fetchData(`movies/watched?limit=${limit}`, jwt)
+        return fetchData(`movies/watched?limit=${limit}`, jwt);
+    }
+
+    static getMovies(title: string, order: string, orderField: string): Promise<MovieWithRating[]> {
+        return fetchData(`movies?title=${title}&order=${order}&order_field=${orderField}`);
     }
 }

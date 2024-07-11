@@ -10,6 +10,7 @@ import { enqueueSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { AuthState } from "@/store/auth";
 import DirectusService from "@/services/directus";
+import Image from "@/components/image";
 
 interface RateProps {
     movie: MovieWithStats,
@@ -97,7 +98,7 @@ function SelectedMovie(props: { id: string }) {
                 }}
             >
                 <div>
-                    <img src={selectedMovie.imgSrc} />
+                    <Image src={selectedMovie.imgSrc as string} />
                 </div>
                 <div style={{ minWidth: 500, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', flex: 1, padding: 10 }}>
                     <div>

@@ -7,7 +7,37 @@ movie_blueprint = Blueprint('movie_blueprint', __name__)
 
 @movie_blueprint.route('/', methods=['GET'])
 def get_movies():
-    return jsonify({'working': True})
+    title_query = str(flask_request.args.get('title', default='', type=str)).lower()
+    order_query = str(flask_request.args.get('order', default='ascending', type=str)).lower()
+    is_ascending = order_query == 'ascending'
+    order_field_query = str(flask_request.args.get('order_field', default='title', type=str)).lower()
+
+    query_movies = db.session.query(Movie.id, Movie.title, Movie.year, Movie.img_src.label('imgSrc'), 
+                                    func.avg(Rating.rating).label('avgRating'),
+                                    func.count(Movie.id).label('numberOfRatings'))\
+        .join(Rating, Movie.id == Rating.movie_id)\
+        .where(func.lower(Movie.title).like(f"%{title_query}%"))\
+        .group_by(Movie.id)\
+    
+    order_column_map = {
+        'title': Movie.title,
+        'year': Movie.year,
+        'rating': func.avg(Rating.rating)
+    }
+
+    if order_field_query not in order_column_map:
+        return jsonify({'error': f'INVALID_ORDER_FIELD_QUERY ({order_field_query})'}), 400
+    
+    if is_ascending:
+        query_movies = query_movies.order_by(order_column_map[order_field_query])
+    else:   
+        query_movies = query_movies.order_by(order_column_map[order_field_query].desc())
+
+    movies = query_movies.limit(16).all()
+    return jsonify(list(map(
+        Movie.searilize_movie_with_rating,
+        movies
+    )))
 
 @movie_blueprint.route('/<id>', methods=['GET'])
 def get_movie(id: str):
@@ -47,11 +77,28 @@ def get_watched_movies():
         .group_by(Movie.id)\
         .limit(limit)\
         .all()
+
+    viewed_ids = [row.id for row in viewed_movies]
+    movie_stats = db.session.query(Movie.id, func.avg(Rating.rating).label('avgRating'),
+                                    func.count(Movie.id).label('numberOfRatings'))\
+        .join(Rating, Movie.id == Rating.movie_id)\
+        .where(Rating.movie_id.in_(viewed_ids))\
+        .group_by(Movie.id)\
+        .limit(limit)\
+        .all()
     
-    return jsonify(list(map(
-        Movie.searilize_movie_with_rating,
-        viewed_movies
-    )))
+    movie_stats_map = {
+        stat.id: {
+            'avgRating': stat.avgRating, 
+            'numberOfRatings': stat.numberOfRatings
+        }
+        for stat in movie_stats
+    }
+    
+    return jsonify([
+        {**Movie.searilize_movie_with_rating(movie), **movie_stats_map[movie.id]}
+        for movie in viewed_movies
+    ])
         
 
 @movie_blueprint.route('/top/rated', methods=['GET'])
