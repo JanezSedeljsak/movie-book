@@ -2,9 +2,9 @@
 
 This project is a comprehensive exploration of the full-stack development and `DevOps` landscape, through a simple movie recommendation application. At its core, the application leverages existing data to provide personalized movie recommendations to users. The frontend is built using `React` and `TypeScript`. On the backend, the application is powered by multiple services that work in concert to handle authentication, recommendations, caching, and data manipulation, among other functionalities. This architecture not only showcases the integration of various technologies and practices but also provides a practical example of building and deploying a full-fledged application in a modern development environment.
 
-## Showcase
-
-
+<div align="center">
+    <img src="https://github.com/JanezSedeljsak/movie-book/assets/43420276/df2f6ff1-2ff0-402c-a3bf-1063d3c7bcf1" width="800" />
+</div>
 
 ## Project Structure
 
