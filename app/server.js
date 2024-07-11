@@ -10,6 +10,10 @@ app.get('/api/config', (req, res) => {
     });
 });
 
+app.get('/health', (req, res) => {
+    res.json({ status: 'UP' });
+});
+
 app.get('*', (req, res) => {
     res.sendFile(__dirname + '/dist/index.html')
 });

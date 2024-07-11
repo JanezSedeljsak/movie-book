@@ -95,6 +95,15 @@ services:
     networks:
       - movie_book_network
 
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    volumes:
+      - ./health:/app/data
+    ports:
+      - "3001:3001"
+    networks:
+      - movie_book_network
+    restart: always
 
 networks:
   movie_book_network:

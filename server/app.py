@@ -11,4 +11,8 @@ db.init_app(app)
 CORS(app)
 
 app.register_blueprint(movie_blueprint, url_prefix='/movies')
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'UP', 'message': 'Service is healthy'})
+
 app.run(host='0.0.0.0', port=5000, debug=True)
